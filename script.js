@@ -179,6 +179,7 @@
 
     function render() {
       button.classList.toggle('off', !wanted);
+      document.body.classList.toggle('music-on', wanted);
       button.setAttribute('aria-pressed', String(wanted));
       button.setAttribute('aria-label', wanted ? 'Pause music' : 'Play music');
     }

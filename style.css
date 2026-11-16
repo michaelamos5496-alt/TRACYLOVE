@@ -888,7 +888,61 @@ main { position: relative; z-index: 1; }
 .note.open .note__panel p { opacity: 1; transform: none; transition-delay: .25s; }
 
 /* ══════════════════════════════════════════════════════════
-   SCENE 9 · CLOSING
+   SCENE 9 · THE SONG
+   ══════════════════════════════════════════════════════════ */
+
+.record-wrap { display: grid; place-items: center; margin-bottom: clamp(30px, 6svh, 54px); }
+.record {
+  width: clamp(132px, 32vw, 184px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #7a1a2f 0 20.5%, #c8a56a 20.5% 21.6%, transparent 22%),
+    conic-gradient(from 25deg, transparent 0 7%, rgba(255, 255, 255, .14) 12%, transparent 18% 50%, rgba(255, 255, 255, .1) 61%, transparent 68%),
+    repeating-radial-gradient(circle, #0c0306 0 1.5px, #1d0a11 1.5px 3px);
+  box-shadow:
+    0 26px 54px -18px rgba(0, 0, 0, .85),
+    0 0 0 1px rgba(200, 165, 106, .38),
+    0 0 60px -10px rgba(160, 40, 64, .5);
+  animation: spin 9s linear infinite;
+  animation-play-state: paused;
+}
+body.music-on .record { animation-play-state: running; }
+.record__label {
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--champagne);
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.song__credit {
+  margin-top: .9em;
+  font-family: var(--sans);
+  font-size: .74rem;
+  letter-spacing: .34em;
+  text-indent: .34em;
+  text-transform: uppercase;
+  color: rgba(247, 240, 228, .62);
+}
+.song__lines {
+  margin: clamp(34px, 6svh, 60px) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: .18em;
+  font-family: var(--script);
+  font-size: clamp(2rem, 1.3rem + 3.2vw, 3.5rem);
+  line-height: 1.3;
+  color: var(--champagne);
+}
+.song__lines li { padding: 0 .15em; text-wrap: balance; }
+
+/* ══════════════════════════════════════════════════════════
+   SCENE 10 · CLOSING
    ══════════════════════════════════════════════════════════ */
 
 .closing { padding-bottom: clamp(110px, 20svh, 200px); }
@@ -943,6 +997,7 @@ main { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) {
   .envelope, .cue i, .meet__us i { animation: none !important; }
   .sound__bars i { animation: none; transform: scaleY(.7); }
+  .record { animation: none; }
   [data-reveal], .hello span, .intro__eyebrow, .intro__sub {
     transform: none !important;
     filter: none !important;
