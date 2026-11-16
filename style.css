@@ -1028,8 +1028,20 @@ body.music-on .record { animation-play-state: running; }
   line-height: .98;
   letter-spacing: -.02em;
 }
+.closing__name {
+  display: block;
+  margin-top: .62em;
+  padding-left: .2em;              /* balances the trailing letter-spacing */
+  font-size: .36em;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--champagne);
+}
 .closing__script {
-  margin-top: .32em;
+  margin-top: .5em;
   font-family: var(--script);
   font-size: clamp(2.1rem, 1.3rem + 3.6vw, 3.9rem);
   line-height: 1.2;
