@@ -341,7 +341,77 @@
     }, { passive: true });
     updateRail();
 
+    startCounter();
+
   }
+
+  /* ───────── The days: a live count since the date in the page ───────── */
+
+  function startCounter() {
+    const count = $('#dayCount');
+    if (!count) return;
+    const [y, m, d] = count.dataset.since.split('-').map(Number);
+    const since = new Date(y, m - 1, d).getTime();           // midnight, in her own time zone
+    const hours = $('#clockH'), minutes = $('#clockM'), seconds = $('#clockS');
+    const number = new Intl.NumberFormat('en-US');
+    const pad = (n) => String(n).padStart(2, '0');
+    let settled = false;                                      // true once the count-up has finished
+
+    const elapsed = () => {
+      const ms = Math.max(0, Date.now() - since);
+      return {
+        days: Math.floor(ms / 86400000),
+        h: Math.floor(ms / 3600000) % 24,
+        m: Math.floor(ms / 60000) % 60,
+        s: Math.floor(ms / 1000) % 60
+      };
+    };
+
+    function tick() {
+      const t = elapsed();
+      hours.textContent = pad(t.h);
+      minutes.textContent = pad(t.m);
+      seconds.textContent = pad(t.s);
+      if (settled) count.textContent = number.format(t.days);
+    }
+
+    function countUp() {
+      const target = elapsed().days;
+      if (reduceMotion) { settled = true; tick(); return; }
+      const began = performance.now(), DURATION = 2600;
+      const step = (now) => {
+        const p = Math.min(1, (now - began) / DURATION);
+        count.textContent = number.format(Math.round(target * (1 - Math.pow(1 - p, 4))));
+        if (p < 1) requestAnimationFrame(step);
+        else { settled = true; tick(); }
+      };
+      requestAnimationFrame(step);
+    }
+
+    tick();
+    setInterval(tick, 1000);
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        setTimeout(countUp, reduceMotion ? 0 : 500);
+      }, { threshold: 0.6 });
+      io.observe(count);
+    } else {
+      settled = true;
+      tick();
+    }
+  }
+
+  /* ───────── One more thing ───────── */
+
+  $('#psSeal').addEventListener('click', (event) => {
+    const seal = event.currentTarget;
+    $('#ps').classList.add('open');
+    seal.setAttribute('aria-expanded', 'true');
+    seal.disabled = true;
+  });
 
   /* ───────── “Open when…” notes ───────── */
 
